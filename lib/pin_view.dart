@@ -5,27 +5,27 @@ import 'package:sms/sms.dart';
 
 class SmsListener {
   final String from;
-  final Function formatBody;
+  final Function? formatBody;
 
-  SmsListener({@required this.from, this.formatBody});
+  SmsListener({required this.from, this.formatBody});
 }
 
 class PinView extends StatefulWidget {
   final Function submit;
   final int count;
-  final bool obscureText;
-  final bool autoFocusFirstField;
-  final bool enabled;
-  final List<int> dashPositions;
-  final SmsListener sms;
-  final TextStyle style;
-  final TextStyle dashStyle;
-  final InputDecoration inputDecoration;
-  final EdgeInsetsGeometry margin;
+  final bool? obscureText;
+  final bool? autoFocusFirstField;
+  final bool? enabled;
+  final List<int>? dashPositions;
+  final SmsListener? sms;
+  final TextStyle? style;
+  final TextStyle? dashStyle;
+  final InputDecoration? inputDecoration;
+  final EdgeInsetsGeometry? margin;
 
   PinView(
-      {@required this.submit,
-      @required this.count,
+      {required this.submit,
+      required this.count,
       this.obscureText: false,
       this.autoFocusFirstField: true,
       this.enabled: true,
@@ -45,10 +45,10 @@ class PinView extends StatefulWidget {
 }
 
 class _PinViewState extends State<PinView> {
-  List<TextEditingController> _controllers;
-  List<FocusNode> _focusNodes;
-  List<String> _pin;
-  SmsReceiver _smsReceiver;
+  late List<TextEditingController> _controllers;
+  late List<FocusNode> _focusNodes;
+  late List<String> _pin;
+  late SmsReceiver _smsReceiver;
 
   @override
   void initState() {
@@ -66,9 +66,9 @@ class _PinViewState extends State<PinView> {
   void _listenSms() async {
     _smsReceiver = SmsReceiver();
     _smsReceiver.onSmsReceived.listen((SmsMessage message) {
-      if (message.sender == widget.sms.from) {
-        String code = widget.sms.formatBody != null
-            ? widget.sms.formatBody(message.body)
+      if (message.sender == widget.sms!.from) {
+        String code = widget.sms!.formatBody != null
+            ? widget.sms!.formatBody!(message.body)
             : message.body;
         for (TextEditingController controller in _controllers) {
           controller.text = code[_controllers.indexOf(controller)];
@@ -89,10 +89,10 @@ class _PinViewState extends State<PinView> {
     List<Widget> pins = List<Widget>.generate(
         widget.count, (int index) => _singlePinView(index)).toList();
 
-    for (int i in widget.dashPositions) {
+    for (int i in widget.dashPositions!) {
       if (i <= widget.count) {
         List<int> smaller =
-            widget.dashPositions.where((int d) => d < i).toList();
+            widget.dashPositions!.where((int d) => d < i).toList();
         pins.insert(i + smaller.length, _dash());
       }
     }
@@ -113,8 +113,8 @@ class _PinViewState extends State<PinView> {
             child: TextField(
               enabled: widget.enabled,
               controller: _controllers[index],
-              obscureText: widget.obscureText,
-              autofocus: widget.autoFocusFirstField ? index == 0 : false,
+              obscureText: widget.obscureText!,
+              autofocus: widget.autoFocusFirstField! ? index == 0 : false,
               focusNode: _focusNodes[index],
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
