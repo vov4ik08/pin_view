@@ -10,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_sms: ^2.3.1  
-  #sms:
-   # git:
-    #  url: https://github.com/vov4ik08/flutter_sms.git
+
+  sms:
+    git:
+      url: https://github.com/vov4ik08/flutter_sms.git
 
 dev_dependencies:
   flutter_test:
